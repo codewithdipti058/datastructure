@@ -1,0 +1,59 @@
+//insertion at begining
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+struct Node* insertAtBeginning(struct Node* head, int data) {
+}
+
+
+void printList(struct Node* head) {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+
+int main() {
+    struct Node* head = NULL; 
+
+
+    head = insertAtBeginning(head, 20);
+    head = insertAtBeginning(head, 30);
+
+   
+    printf("Linked List before insertion: ");
+    printList(head);
+
+   
+    head = insertAtBeginning(head, 10);
+
+   
+    printf("Linked List after insertion of 10: ");
+    printList(head);
+
+    
+    struct Node* temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+
+    return 0;
+}
