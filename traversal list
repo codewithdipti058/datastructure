@@ -1,0 +1,62 @@
+//travarsal in link list
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (!newNode) {
+        printf("Memory allocation failed!\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode; 
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next; 
+    }
+    temp->next = newNode; 
+}
+
+
+void traverseList(struct Node* head) {
+    struct Node* temp = head;
+    printf("Linked List: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+    insertEnd(&head, 10);
+    insertEnd(&head, 20);
+    insertEnd(&head, 30);
+    insertEnd(&head, 40);
+
+    traverseList(head);
+
+    struct Node* temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+
+    return 0;
+}
