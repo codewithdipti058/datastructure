@@ -1,0 +1,91 @@
+//deletion in linked list at begining
+#include <stdio.h>
+#include <stdlib.h>
+
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+
+void insertEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+struct Node* deleteNode(struct Node* head, int value) {
+    struct Node* temp = head;
+    struct Node* prev = NULL;
+
+    if (temp != NULL && temp->data == value) {
+        head = temp->next; // Change head
+        free(temp); // Free the old head
+        return head;
+    }
+
+    while (temp != NULL && temp->data != value) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Value %d not found in the list.\n", value);
+        return head;
+    }
+    prev->next = temp->next;
+    free(temp); // Free the memory
+    return head;
+}
+
+void printList(struct Node* head) {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* head = NULL; 
+
+    insertEnd(&head, 20);
+    insertEnd(&head, 30);
+    insertEnd(&head, 40);
+    insertEnd(&head, 50);
+
+    printf("Linked List before deletion: ");
+    printList(head);
+
+    int valueToDelete = 30;
+    head = deleteNode(head, valueToDelete);
+
+    printf("Linked List after deletion of %d: ", valueToDelete);
+    printList(head);
+
+    struct Node* temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+
+    return 0;
+}
