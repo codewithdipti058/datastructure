@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TABLE_SIZE 10 
+
+typedef struct Node {
+    int key;
+    struct Node* next;
+} Node;
+
+typedef struct HashTable {
+    Node* table[TABLE_SIZE];
+} HashTable;
+
+HashTable* createHashTable();
+int hashFunction(int key);
+void insert(HashTable* ht, int key);
+int search(HashTable* ht, int key);
+void displayHashTable(HashTable* ht);
+void freeHashTable(HashTable* ht);
+
+int main() {
+    HashTable* ht = createHashTable();
+
+    
+    insert(ht, 15);
+    insert(ht, 25);
+    insert(ht, 35);
+    insert(ht, 20);
+    insert(ht, 30);
+
+    
+    printf("Hash Table:\n");
+    displayHashTable(ht);
+
+    printf("\nSearch for key 25: %s\n", search(ht, 25) ? "Found" : "Not Found");
+    printf("Search for key 40: %s\n", search(ht, 40) ? "Found" : "Not Found");
+
+    
+    freeHashTable(ht);
+
+    return 0;
+}
+
+HashTable* createHashTable() {
+    HashTable* ht = (HashTable*)malloc(sizeof(HashTable));
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        ht->table[i] = NULL;
+    }
+    return ht;
+}
+
+int hashFunction(int key) {
+    return key % TABLE_SIZE;
+}
+
+void insert(HashTable* ht, int key) {
+    int index = hashFunction(key);
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->next = ht->table[index];
+    ht->table[index] = newNode;
+}
+
+int search(HashTable* ht, int key) {
+    int index = hashFunction(key);
+    Node* temp = ht->table[index];
+    while (temp != NULL) {
+        if (temp->key == key) {
+            return 1; // Key found
+        }
+        temp = temp->next;
+    }
+    return 0; 
+}
+
+void displayHashTable(HashTable* ht) {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        printf("Index %d: ", i);
+        Node* temp = ht->table[i];
+        while (temp != NULL) {
+            printf("%d -> ", temp->key);
+            temp = temp->next;
+        }
+        printf("NULL\n");
+    }
+}
+
+void freeHashTable(HashTable* ht) {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        Node* temp = ht->table[i];
+        while (temp != NULL) {
+            Node* toDelete = temp;
+            temp = temp->next;
+            free(toDelete);
+        }
+    }
+    free(ht);
+}
